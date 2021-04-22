@@ -1,7 +1,7 @@
 {
-    "name": "stancl/tenancy",
-    "description": "Automatic multi-tenancy for your Laravel application.",
-    "keywords": ["laravel", "multi-tenancy", "multi-database", "tenancy"],
+    "name": "dyanakiev/modified-tenancy",
+    "description": "#modified version of stancl/tenancy use with caution.",
+    "keywords": [],
     "license": "MIT",
     "authors": [
         {
