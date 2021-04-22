@@ -17,19 +17,6 @@ class CacheManager extends BaseCacheManager
      */
     public function __call($method, $parameters)
     {
-        $tags = [config('tenancy.cache.tag_base') . tenant()->getTenantKey()];
-
-        if ($method === 'tags') {
-            if (count($parameters) !== 1) {
-                throw new \Exception("Method tags() takes exactly 1 argument. {count($parameters)} passed.");
-            }
-
-            $names = $parameters[0];
-            $names = (array) $names; // cache()->tags('foo') https://laravel.com/docs/5.7/cache#removing-tagged-cache-items
-
-            return $this->store()->tags(array_merge($tags, $names));
-        }
-
-        return $this->store()->tags($tags)->$method(...$parameters);
+        return $this->store()->$method(...$parameters);
     }
 }
