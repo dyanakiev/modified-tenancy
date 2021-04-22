@@ -36,15 +36,21 @@ abstract class CachedTenantResolver implements TenantResolver
 
         $key = $this->getCacheKey(...$args);
 
-        if ($this->cache->has($key)) {
-            $tenant = $this->cache->get($key);
+        $cache_get = $this->cache->get($key);
 
-            $this->resolved($tenant, ...$args);
-
-            return $tenant;
+        if ($cache_get) {
+            if ($cache_get === '404') throw new \Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedOnDomainException(implode(',', $args));
+            $this->resolved($cache_get, ...$args);
+            return $cache_get;
         }
 
-        $tenant = $this->resolveWithoutCache(...$args);
+        try {
+            $tenant = $this->resolveWithoutCache(...$args);
+        } catch (\Exception $exception) {
+            $this->cache->put($key, '404', 120);
+            throw new \Stancl\Tenancy\Exceptions\TenantCouldNotBeIdentifiedOnDomainException(implode(',', $args));
+        }
+        
         $this->cache->put($key, $tenant, static::$cacheTTL);
 
         return $tenant;
