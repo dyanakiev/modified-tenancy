@@ -69,7 +69,7 @@ class TenancyServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('globalCache', function ($app) {
-            return new CacheManager($app);
+            return (new CacheManager($app))->store('central');
         });
     }
 
